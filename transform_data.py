@@ -11,6 +11,13 @@ import arrow
 from lib.date_utils import *
 from lib.models import *
 
+IGNORE_EMPLOYEES = [
+    "surbhikhr",
+    "jacob-hughes",
+    "RiccardoTonini",
+    "luanampb",
+]
+
 parser = argparse.ArgumentParser(
     description="Parses the output of download_data.py into a list of reviews and their status, either 'on_time', 'late', or 'no_response'"
 )
@@ -125,7 +132,7 @@ def transform_data(data):
             else:
                 print(f"Unknown type: {typename}", file=sys.stderr)
 
-    return reviews
+    return [r for r in reviews if r.reviewer not in IGNORE_EMPLOYEES]
 
 
 def write_transformed_file(reviews, output_filename):
@@ -137,12 +144,38 @@ def write_transformed_file(reviews, output_filename):
         )
 
 
+def get_file_list(directory):
+    return [f for f in os.listdir(directory) if f != "transformed.json"]
+
+
 backend_reviews = []
 backend_data_dir = os.path.join("data", "backend")
-for backend_input_file in os.listdir(backend_data_dir):
+for backend_input_file in get_file_list(backend_data_dir):
     with open(os.path.join(backend_data_dir, backend_input_file)) as fh:
         data = json.load(fh)
         backend_reviews.extend(transform_data(data))
 
 backend_output_filename = os.path.join("data", "backend", "transformed.json")
 write_transformed_file(backend_reviews, backend_output_filename)
+
+
+frontend_reviews = []
+frontend_data_dir = os.path.join("data", "frontend")
+for frontend_input_file in get_file_list(frontend_data_dir):
+    with open(os.path.join(frontend_data_dir, frontend_input_file)) as fh:
+        data = json.load(fh)
+        frontend_reviews.extend(transform_data(data))
+
+frontend_output_filename = os.path.join("data", "frontend", "transformed.json")
+write_transformed_file(frontend_reviews, frontend_output_filename)
+
+
+ta_reviews = []
+ta_data_dir = os.path.join("data", "ta")
+for ta_input_file in get_file_list(ta_data_dir):
+    with open(os.path.join(ta_data_dir, ta_input_file)) as fh:
+        data = json.load(fh)
+        ta_reviews.extend(transform_data(data))
+
+ta_output_filename = os.path.join("data", "ta", "transformed.json")
+write_transformed_file(ta_reviews, ta_output_filename)
