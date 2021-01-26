@@ -7,6 +7,22 @@ BACKEND_REPOSITORIES = [
     "TransactionService",
     "MediaService",
     "SearchService",
+    "Python-Core-SDK",
+    "TaxService",
+    "RoadRunner",
+    "common-be-scripts",
+    "pdf-service",
+    "FixtureService",
+    "TranslationService",
+    "MPB-Core-Protos",
+    "K8s-LetsEncrypt",
+    "SearchService-Helm-Charts",
+    "SearchService-Protos",
+    "TransactionService-Protos",
+    "TransactionService-Protos",
+    "TaxService-Protos",
+    "TaxService-Helm-Charts",
+    "TransactionService-Helm-Charts",
 ]
 
 FRONTEND_REPOSITORIES = [
