@@ -3,7 +3,7 @@ import os
 import json
 import sys
 from collections import defaultdict, namedtuple
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict, DefaultDict, NamedTuple, List
 
 import arrow
@@ -35,14 +35,24 @@ args = parser.parse_args()
 
 
 def transform_data(data, ignore_dependabot=True):
+    too_old = arrow.utcnow().to(args.tz).datetime - timedelta(days=14)
     reviews: List[Review] = []
-    for pr in data:
+    prs = [
+        pr for pr in data if arrow.get(pr["createdAt"]).to(args.tz).datetime > too_old
+    ]
+    if prs:
+        print(
+            "Found",
+            len(prs),
+            " for the last two weeks in",
+            prs[0]["baseRepository"]["name"],
+        )
+    for pr in prs:
         # dict from name of login of requested reviewer -> time review should be done
         requested_reviews: Dict[str, arrow.Arrow] = {}
 
         if "dependabot" in pr["author"]["login"] and ignore_dependabot:
             continue
-
         # raw data transformation step
         for item in pr["timelineItems"]["nodes"]:
             # transform all datetime strings into localized arrow datetime objects

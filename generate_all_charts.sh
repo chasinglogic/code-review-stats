@@ -1,4 +1,7 @@
-python ./download_all_data.py
+if [[ -z $SKIP_DOWNLOAD ]]; then
+  python ./download_all_data.py
+fi
+
 python ./transform_data.py
 
 python ./visualize_data.py -f data/backend/transformed.json data/backend_report.html

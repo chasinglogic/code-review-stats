@@ -59,6 +59,8 @@ query($repoOwner: String!, $repoName: String!, $prBefore: String, $prCount: Int 
       }
       nodes {
         title
+        createdAt
+        baseRepository { name }
         author { login }
         timelineItems(first: 200, itemTypes:[REVIEW_REQUESTED_EVENT, REVIEW_REQUEST_REMOVED_EVENT, PULL_REQUEST_REVIEW, CLOSED_EVENT, MERGED_EVENT]) {
           nodes {
