@@ -32,6 +32,8 @@ FRONTEND_REPOSITORIES = [
 
 TA_REPOSITORIES = [
     "WebdriverTests",
+    "PerformanceTests",
+    "Python-Test-SDK",
 ]
 
 DATA_DIR = "data"

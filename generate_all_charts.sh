@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+source env/bin/activate
+
 if [[ -z $SKIP_DOWNLOAD ]]; then
   python ./download_all_data.py
 fi
